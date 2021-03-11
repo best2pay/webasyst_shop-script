@@ -89,7 +89,7 @@ class best2payPayment extends waPayment implements waIPayment {
 	        $elementPrice = $elementPrice * 100;
 	        $fiscalPositions .= $elementPrice.';';
 	        $fiscalPositions .= $TAX . ';';
-	        $fiscalPositions .= 'shipping|';
+	        $fiscalPositions .= 'Доставка|';
 		}
 	    $fiscalPositions = substr($fiscalPositions, 0, -1);
 
