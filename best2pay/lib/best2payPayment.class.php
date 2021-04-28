@@ -67,6 +67,7 @@ class best2payPayment extends waPayment implements waIPayment {
 
 	    // список товаров
 	    $fiscalPositions='';
+	    $fiscalAmount = 0;
 	    foreach ($order_data->items as $item) {
 	        $fiscalPositions .= $item['quantity'].';';
 	        $elementPrice = round($item['price'], 2) - round(ifset($item['discount'], 0.0), 2);
@@ -74,23 +75,25 @@ class best2payPayment extends waPayment implements waIPayment {
 	        $fiscalPositions .= $elementPrice.';';
 	        $fiscalPositions .= $TAX . ';';
 	        $fiscalPositions .= mb_substr($item['name'], 0, 128).'|';
+	        
+	        $fiscalAmount += $item['quantity'] * $elementPrice;
 	    }    
-		if($order_data->discount > 0) {
-	        $fiscalPositions.='1;';
-	        $elementPrice = round($order_data->discount, 2);
-	        $elementPrice = $elementPrice * -100;
-	        $fiscalPositions .= $elementPrice.';';
-	        $fiscalPositions .= $TAX . ';';
-	        $fiscalPositions .= 'скидка|';
-		}
-		if($order_data->shipping > 0) {
-	        $fiscalPositions.='1;';
-	        $elementPrice = round($order_data->shipping, 2);
-	        $elementPrice = $elementPrice * 100;
-	        $fiscalPositions .= $elementPrice.';';
-	        $fiscalPositions .= $TAX . ';';
-	        $fiscalPositions .= 'Доставка|';
-		}
+
+	    if ($order_data->shipping > 0) {
+		$fiscalPositions.='1;';
+		$elementPrice = round($order_data->shipping, 2);
+		$elementPrice = $elementPrice * 100;
+		$fiscalPositions .= $elementPrice.';';
+		$fiscalPositions .= $TAX . ';';
+		$fiscalPositions .= 'Доставка|';
+		
+		$fiscalAmount += $elementPrice;
+    	    }
+    	    
+    	    $fiscalDiff = abs($fiscalAmount - $price);
+    	    if ($fiscalDiff) {
+    	    	$fiscalPositions .= '1;'.$fiscalDiff.';6;Скидка;14|';
+    	    }
 	    $fiscalPositions = substr($fiscalPositions, 0, -1);
 
 		$signature  = base64_encode(md5($this->sector_id . $price . $currency . $this->password));
