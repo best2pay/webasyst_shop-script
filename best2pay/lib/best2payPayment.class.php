@@ -69,14 +69,14 @@ class best2payPayment extends waPayment implements waIPayment {
 	    $fiscalPositions='';
 	    $fiscalAmount = 0;
 	    foreach ($order_data->items as $item) {
-	        $fiscalPositions .= $item['quantity'].';';
-	        $elementPrice = round($item['price'], 2) - round(ifset($item['discount'], 0.0), 2);
-	        $elementPrice = $elementPrice * 100;
-	        $fiscalPositions .= $elementPrice.';';
-	        $fiscalPositions .= $TAX . ';';
-	        $fiscalPositions .= mb_substr($item['name'], 0, 128).'|';
-	        
-	        $fiscalAmount += $item['quantity'] * $elementPrice;
+			$fiscalPositions .= $item['quantity'].';';
+			$elementPrice = round($item['price'], 2) - round(ifset($item['discount'], 0.0), 2);
+			$elementPrice = $elementPrice * 100;
+			$fiscalPositions .= $elementPrice.';';
+			$fiscalPositions .= $TAX . ';';
+			$fiscalPositions .= mb_substr($item['name'], 0, 128).'|';
+
+			$fiscalAmount += $item['quantity'] * $elementPrice;
 	    }    
 
 	    if ($order_data->shipping > 0) {
