@@ -80,20 +80,20 @@ class best2payPayment extends waPayment implements waIPayment {
 	    }    
 
 	    if ($order_data->shipping > 0) {
-		$fiscalPositions.='1;';
-		$elementPrice = round($order_data->shipping, 2);
-		$elementPrice = $elementPrice * 100;
-		$fiscalPositions .= $elementPrice.';';
-		$fiscalPositions .= $TAX . ';';
-		$fiscalPositions .= 'Доставка|';
-		
-		$fiscalAmount += $elementPrice;
-    	    }
+			$fiscalPositions.='1;';
+			$elementPrice = round($order_data->shipping, 2);
+			$elementPrice = $elementPrice * 100;
+			$fiscalPositions .= $elementPrice.';';
+			$fiscalPositions .= $TAX . ';';
+			$fiscalPositions .= 'Доставка|';
+			
+			$fiscalAmount += $elementPrice;
+	    }
     	    
-    	    $fiscalDiff = abs($fiscalAmount - $price);
-    	    if ($fiscalDiff) {
-    	    	$fiscalPositions .= '1;'.$fiscalDiff.';6;Скидка;14|';
-    	    }
+	    $fiscalDiff = abs($fiscalAmount - $price);
+	    if ($fiscalDiff) {
+	    	$fiscalPositions .= '1;'.$fiscalDiff.';6;Скидка;14|';
+	    }
 	    $fiscalPositions = substr($fiscalPositions, 0, -1);
 
 		$signature  = base64_encode(md5($this->sector_id . $price . $currency . $this->password));
