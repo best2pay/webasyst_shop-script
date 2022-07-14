@@ -267,7 +267,7 @@ class best2payPayment extends waPayment implements waIPayment {
 		$signature = base64_encode(md5(implode('', $tmp_response) . $this->password));
 		if ($signature !== $response['signature'])
 			return false;
-		return (($response['type'] == 'PURCHASE' || $response['type'] == 'EPAYMENT') && $response['state'] == 'APPROVED');
+		return (($response['type'] == 'PURCHASE_BY_QR' || $response['type'] == 'PURCHASE' || $response['type'] == 'AUTHORIZE' || $response['type'] == 'EPAYMENT') && $response['state'] == 'APPROVED');
 
 	}
 
